@@ -8,7 +8,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "chatInput is required" }, { status: 400 });
   }
 
-  const webhookUrl = "https://n8n-1h2gjdisdrtt.jkt1.sumopod.my.id/webhook/fitness-coach";
+  const webhookUrl = process.env.N8N_WEBHOOK_URL;
+  if (!webhookUrl) {
+    return NextResponse.json(
+      { error: "Webhook URL not configured" },
+      { status: 500 }
+    );
+  }
 
   try {
     const n8nRes = await fetch(webhookUrl, {
